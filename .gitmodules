@@ -1,0 +1,3 @@
+[submodule "RT-DETRv4"]
+	path = RT-DETRv4
+	url = https://github.com/RT-DETRs/RT-DETRv4
