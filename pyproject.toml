@@ -1,0 +1,17 @@
+[project]
+name = "rt-detrv4-install"
+version = "0.1.0"
+description = "RT-DETRv4 installation and development environment"
+requires-python = ">=3.11"
+dependencies = [
+    "torch",
+    "torchvision",
+    "faster-coco-eval>=1.6.5",
+    "PyYAML",
+    "tensorboard",
+    "scipy",
+    "calflops",
+    "transformers",
+    "torchmetrics>=1.8.2",
+    "termcolor>=3.3.0",
+]
