@@ -57,31 +57,48 @@ coco-format/
 
 ## 🎯 Training
 
-### Single GPU Training
+### Train All Variants (Recommended)
+
+Train all four model variants (Small → Medium → Large → X-Large) sequentially. **Automatically uses all available GPUs** via distributed training:
+
+```bash
+# Using the shell script (via uv venv)
+./train-rt-detr-v4-all-variants.sh --use-amp
+
+# Or directly with uv
+uv run train-rt-detr-v4-all-variants.py --use-amp
+```
+
+Options:
+- `--variants s m l x` — Train specific variants only (default: all)
+- `--use-amp` — Enable mixed precision
+- `--test-only` — Evaluation only
+
+### Single Variant Training
 
 Train any of the four model variants (Small, Medium, Large, X-Large):
 
 ```bash
 # Small variant
-python train-rt-detr-v4-s.py --use-amp
+uv run train-rt-detr-v4-s.py --use-amp
 
 # Medium variant
-python train-rt-detr-v4-m.py --use-amp
+uv run train-rt-detr-v4-m.py --use-amp
 
 # Large variant
-python train-rt-detr-v4-l.py --use-amp
+uv run train-rt-detr-v4-l.py --use-amp
 
 # X-Large variant
-python train-rt-detr-v4-x.py --use-amp
+uv run train-rt-detr-v4-x.py --use-amp
 ```
 
 ### Multi-GPU Training
 
-For distributed training with multiple GPUs, use `torchrun`:
+The **train-rt-detr-v4-all-variants.py** script automatically detects and uses all available GPUs via `torchrun`. For single-variant multi-GPU training, use `torchrun` directly:
 
 ```bash
 # Example: Train Small variant on 4 GPUs
-CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun \
+CUDA_VISIBLE_DEVICES=0,1,2,3 uv run torchrun \
     --master_port=7777 \
     --nproc_per_node=4 \
     train-rt-detr-v4-s.py \
@@ -91,38 +108,47 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun \
 
 ### Command-Line Options
 
-All training scripts support the following options:
-
 | Option | Description | Default |
 |--------|-------------|---------|
 | `--use-amp` | Enable Automatic Mixed Precision training | False |
 | `--seed SEED` | Random seed for reproducibility | 0 |
-| `-r, --resume PATH` | Resume training from checkpoint | None |
-| `-t, --tune PATH` | Fine-tune from checkpoint | None |
+| `-r, --resume PATH` | Resume training from checkpoint (single-variant scripts) | None |
+| `-t, --tune PATH` | Fine-tune from checkpoint (single-variant scripts) | None |
 | `--test-only` | Only run evaluation/testing | False |
+| `--variants s m l x` | Variants to train (all-variants script only) | All |
 | `--rtdetrv4-path PATH` | Path to RT-DETRv4 repository | `RT-DETRv4` |
-| `--output-dir DIR` | Output directory (overrides config) | From config file |
+| `--output-dir DIR` | Output directory (single-variant scripts) | From config file |
 
 ### Examples
 
-#### Train with AMP
+#### Train All Variants with AMP (uses all GPUs)
 ```bash
-python train-rt-detr-v4-s.py --use-amp
+./train-rt-detr-v4-all-variants.sh --use-amp
+```
+
+#### Train Specific Variants Only
+```bash
+uv run train-rt-detr-v4-all-variants.py --variants s m --use-amp
+```
+
+#### Train Single Variant with AMP
+```bash
+uv run train-rt-detr-v4-s.py --use-amp
 ```
 
 #### Resume Training
 ```bash
-python train-rt-detr-v4-m.py --resume models/rt-detr-v4-m/checkpoint.pth
+uv run train-rt-detr-v4-m.py --resume models/rt-detr-v4-m/checkpoint.pth
 ```
 
 #### Fine-tune from Pre-trained Model
 ```bash
-python train-rt-detr-v4-l.py --tune path/to/pretrained_model.pth --use-amp
+uv run train-rt-detr-v4-l.py --tune path/to/pretrained_model.pth --use-amp
 ```
 
 #### Evaluation Only
 ```bash
-python train-rt-detr-v4-x.py --test-only --resume models/rt-detr-v4-x/checkpoint.pth
+uv run train-rt-detr-v4-x.py --test-only --resume models/rt-detr-v4-x/checkpoint.pth
 ```
 
 ## ⚙️ Configuration
@@ -169,6 +195,8 @@ This file specifies:
 ```
 RT-DETR-v4-install/
 ├── configs.py                          # Global configuration
+├── train-rt-detr-v4-all-variants.py   # Train all variants (auto multi-GPU)
+├── train-rt-detr-v4-all-variants.sh   # One-liner to run via uv venv
 ├── train-rt-detr-v4-s.py              # Small variant training script
 ├── train-rt-detr-v4-m.py              # Medium variant training script
 ├── train-rt-detr-v4-l.py              # Large variant training script
