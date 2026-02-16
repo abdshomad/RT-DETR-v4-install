@@ -1,6 +1,6 @@
 [submodule "RT-DETRv4"]
 	path = RT-DETRv4
-	url = https://github.com/RT-DETRs/RT-DETRv4
+	url = https://github.com/abdshomad/RT-DETRv4
 [submodule "chicken-detection-labelme-format"]
 	path = chicken-detection-labelme-format
 	url = https://github.com/abdshomad/chicken-detection-labelme-format.git
