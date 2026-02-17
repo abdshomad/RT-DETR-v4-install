@@ -111,14 +111,16 @@ def main():
     if args.test_only:
         cmd.append("--test-only")
     
-    if args.output_dir:
-        cmd.extend(["--update", f"output_dir={args.output_dir}"])
+    # Default to chicken-detection-models/ when --output-dir not specified
+    output_dir = args.output_dir or str((configs.PROJECT_ROOT / configs.OUTPUT_DIRS["x"]).resolve())
+    cmd.extend(["--update", f"output_dir={output_dir}"])
     
     # Print configuration
     print("\n" + "=" * 60)
     print("RT-DETRv4-X Training Configuration")
     print("=" * 60)
     print(f"Config file: {config_path}")
+    print(f"Output directory: {output_dir}")
     print(f"Train annotations: {configs.DATASET_CONFIG['train_ann_file']}")
     print(f"Val annotations: {configs.DATASET_CONFIG['val_ann_file']}")
     print(f"Number of classes: {configs.DATASET_CONFIG['num_classes']}")

@@ -46,8 +46,8 @@ DEFAULT_TRAINING_CONFIG = {
 
 # Output directories (relative to project root)
 OUTPUT_DIRS = {
-    "s": "models/rt-detr-v4-s",
-    "m": "models/rt-detr-v4-m",
-    "l": "models/rt-detr-v4-l",
-    "x": "models/rt-detr-v4-x",
+    "s": "chicken-detection-models/rt-detr-v4-s",
+    "m": "chicken-detection-models/rt-detr-v4-m",
+    "l": "chicken-detection-models/rt-detr-v4-l",
+    "x": "chicken-detection-models/rt-detr-v4-x",
 }

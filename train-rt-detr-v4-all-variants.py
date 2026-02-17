@@ -135,10 +135,17 @@ def main():
             if args.test_only:
                 cmd.append("--test-only")
 
+            # Use chicken-detection-models/ for output
+            output_dir = str(
+                (configs.PROJECT_ROOT / configs.OUTPUT_DIRS[variant]).resolve()
+            )
+            cmd.extend(["--update", f"output_dir={output_dir}"])
+
             print("\n" + "-" * 60)
             print(f"Training RT-DETRv4-{VARIANT_NAMES[variant]} ({variant})")
             print("-" * 60)
             print(f"Config: {config_path}")
+            print(f"Output: {output_dir}")
             print(f"Running: {' '.join(cmd)}\n")
 
             result = subprocess.run(cmd)
